@@ -1,9 +1,31 @@
-# include "../libft/libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
+/*   Updated: 2024/01/22 19:44:23 by atonkopi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int main(void)
+#include "../libft/libft.h"
+#include <signal.h>
+
+void	signal_handler(int signum)
 {
-    __pid_t pid;
+	ft_printf("Received SIGINT!\n", signum);
+	exit(0);
+}
 
-    pid = getpid();
-    ft_printf("Server pid: %d\n", pid);
+int	main(void)
+{
+	__pid_t	pid;
+
+	pid = getpid();
+	ft_printf("Server pid: %d\n", pid);
+    sleep(10);
+	signal(SIGINT, signal_handler);
+	signal(SIGTERM, signal_handler);
 }
