@@ -1,33 +1,41 @@
 CC = cc
-NAME = server
 CFLAGS = -Wall -Wextra -Werror
-LIBFT = 	../libft/libft.a
-PRINTF = 	../libft/ft_printf/ft_printf.a
-INCLUDES = -I includes -I ../libft -I ../libft/ft_printf
+LIBFT = libft
+PRINTF = libft/ft_printf
+LIBFT_LIB = $(LIBFT)/libft.a
+INCLUDES = -I$(LIBFT)
 
-SRC = main.c
-OBJ = $(SRC:.c=.o)
+SRCS_SERVER = src/server.c
+SRCS_CLIENT = src/client.c
+OBJS_SERVER = $(SRCS_SERVER:.c=.o)
+OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
+TARGET_SERVER = server
+TARGET_CLIENT = client
 
-all: $(NAME)
+all: $(TARGET_SERVER) $(TARGET_CLIENT)
 
-$(NAME): $(LIBFT) $(PRINTF) $(OBJ)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) -L ../libft -lft -L ../libft/ft_printf -lftprintf
+$(TARGET_SERVER): $(OBJS_SERVER)
+	$(MAKE) -C $(LIBFT)
+	$(MAKE) -C $(PRINTF)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_LIB)
 
-$(LIBFT):
-	make -C ../libft
-
-$(PRINTF):
-	make -C ../libft/ft_printf
+$(TARGET_CLIENT): $(OBJS_CLIENT)
+	$(MAKE) -C $(LIBFT)
+	$(MAKE) -C $(PRINTF)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_LIB)
 
 clean:
-	make clean -C ../libft
-	make clean -C ../libft/ft_printf
-	rm -f $(OBJ)
+	$(MAKE) -C $(LIBFT) clean
+	$(MAKE) -C $(PRINTF) clean
+	rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
 
 fclean: clean
-	make fclean -C ../libft
-	make fclean -C ../libft/ft_printf
-	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT) fclean
+	$(MAKE) -C $(PRINTF) fclean
+	rm -f $(TARGET_SERVER) $(TARGET_CLIENT)
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 re: fclean all
 
