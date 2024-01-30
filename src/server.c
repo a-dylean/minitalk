@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
-#include <signal.h>
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
@@ -38,26 +37,32 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	}
 	kill(client_pid, SIGUSR2);
 }
+
+# include <limits.h>
+# include <signal.h>
+# include <stdlib.h>
+# include <sys/types.h>
+# include <signal.h>
 int	main(void)
 {
-	__pid_t	pid;
-	struct sigaction sa;
+	struct sigaction	sa;
+	sigset_t			block_mask;
 
-	sa.sa_handler = &signal_handler;
-	sa.sa_flags = 0;
-	pid = getpid();
-	ft_printf("Server pid: %d\n", pid);
-	// if (sigaction(SIGINT, &sa, NULL) == -1)
-	// {
-	// 	ft_printf("Error");
-	// 	exit(1);
-	// }
-	printf("Waiting for the client...\n");
-	// signal(SIGINT, signal_handler);
+	sigemptyset(&block_mask);
+	sigaddset(&block_mask, SIGINT);
+	sigaddset(&block_mask, SIGQUIT);
+	sa.sa_handler = 0;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_mask = block_mask;
+	sa.sa_sigaction = signal_handler;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	ft_printf("Server PID: %d\n", getpid());
+	ft_printf("Waiting for the client...\n");
 	while (1)
 	{
-		//ft_printf("hello");
 		sleep(1);
+		//pause();
 	}
 	return (0);
 }
