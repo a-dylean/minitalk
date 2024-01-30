@@ -14,10 +14,10 @@ TARGET_CLIENT = client
 all: $(TARGET_SERVER) $(TARGET_CLIENT)
 
 $(TARGET_SERVER): $(LIBFT) $(PRINTF) $(OBJS_SERVER)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(TARGET_SERVER) $(OBJS_SERVER) -L libft -lft -L libft/ft_printf -lftprintf
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(TARGET_SERVER) $(OBJS_SERVER) -L libft -lft -L libft/ft_printf -lftprintf -I include
 
 $(TARGET_CLIENT): $(LIBFT) $(PRINTF) $(OBJS_CLIENT)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(TARGET_CLIENT) $(OBJS_CLIENT) -L libft -lft -L libft/ft_printf -lftprintf
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(TARGET_CLIENT) $(OBJS_CLIENT) -L libft -lft -L libft/ft_printf -lftprintf -I include
 
 $(LIBFT):
 	make -C libft
