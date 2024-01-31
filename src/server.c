@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/01/30 15:07:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:54:45 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(void)
 	sigaddset(&block_mask, SIGINT);
 	sigaddset(&block_mask, SIGQUIT);
 	sa.sa_handler = 0;
-	sa.sa_flags = SA_SIGINFO;
+	sa.sa_flags = 0;
 	sa.sa_mask = block_mask;
 	sa.sa_sigaction = signal_handler;
 	sigaction(SIGUSR1, &sa, NULL);
