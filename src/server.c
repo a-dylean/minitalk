@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/05 15:55:51 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:28:12 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ void	signal_handler(int signum, siginfo_t *siginfo, void *context)
 	kill(client_pid, SIGUSR1);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
+	(void)argv;
 	struct sigaction	sa;
-
+	
+	if (argc != 1)
+		exit(ft_printf("Wrong input! Correct usage: ./server \n"));
 	// sigset_t			block_mask;
 	ft_bzero(&sa, sizeof(struct sigaction));
 	// sigemptyset(&block_mask);

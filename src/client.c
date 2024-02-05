@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/05 16:16:25 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:26:59 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	main(int argc, char **argv)
 	struct sigaction	sa;
 
 	if (argc != 3 || !ft_str_isnumeric(argv[1]))
-		exit(ft_printf("Wrong input! Correct usage: ./client [server's PID] [string]\n"));
+		exit(ft_printf("Wrong input! Correct usage: ./client [server's PID] [message to send]\n"));
 	server_pid = ft_atoi(argv[1]);
 	if (kill(server_pid, 0) == -1 || server_pid == 0)
 		exit(ft_printf("Invalid PID: %s\n", argv[1]));
