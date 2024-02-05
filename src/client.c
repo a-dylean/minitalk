@@ -13,49 +13,35 @@
 
 #include "../include/minitalk.h"
 
-int	send_null(int pid)
+static void	ft_send_char(pid_t pid, char c)
 {
-	static int	i = 0;
+	int		i;
+	char	bit;
 
-	if (i++ != 8)
+	i = 8;
+	while (i--)
 	{
-		if (kill(pid, SIGUSR1) == -1)
-			ft_printf("ERROR\n");
-		return (0);
+		bit = (c >> i) & 1;
+		if (bit)
+			kill(pid, SIGUSR2);
+		else
+			kill(pid, SIGUSR1);
+		pause();
+		usleep(100);
 	}
-	return (1);
 }
 
-int	send_bit(int pid, char *str)
+static void	ft_send_msg(pid_t pid, char *msg)
 {
-	static char	*message = 0;
-	static int	s_pid = 0;
-	static int	bits = -1;
-	
-	if (str)
-		message = ft_strdup(str);
-	if (!message)
-		ft_printf("ERROR\n");
-	if (pid)
-		s_pid = pid;
-	if (message[++bits / 8])
+	if (!msg)
+		return ;
+	while (*msg != '\0')
 	{
-		if (message[bits / 8] & (0x80 >> (bits % 8)))
-		{
-			ft_printf("Send");
-			if (kill(s_pid, SIGUSR2) == -1)
-				ft_printf("ERROR\n");
-		}
-		else if (kill(s_pid, SIGUSR1) == -1)
-			ft_printf("ERROR\n");
-		return (0);
+		ft_send_char(pid, *msg);
+		msg++;
 	}
-	if (!send_null(s_pid))
-		return (0);
-	free(message);
-	return (1);
+	ft_send_char(pid, '\0');
 }
-
 
 int	main(int argc, char **argv)
 {
@@ -65,9 +51,9 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	//ft_printf("Client pid: %d\n", getpid());
-	// signal(SIGUSR1, handler_sigusr);
-	// signal(SIGUSR2, handler_sigusr);
-	send_bit(ft_atoi(argv[1]), argv[2]);
+	// signal(SIGUSR1, ft_handle_signal);
+	// signal(SIGUSR2, ft_handle_signal);
+	// ft_send_msg(spid, msg);
 	while (1)
 		pause();
 }
