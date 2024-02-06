@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/06 13:03:16 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/06 13:06:38 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,15 @@ int	main(int argc, char **argv)
 	(void)argv;
 	if (argc != 1)
 		exit(ft_printf("Wrong input! Correct usage: ./server \n"));
-	// sigset_t			block_mask;
+	sigset_t			block_mask;
 	ft_bzero(&sa, sizeof(struct sigaction));
-	// sigemptyset(&block_mask);
-	// sigaddset(&block_mask, SIGINT);
-	// sigaddset(&block_mask, SIGQUIT);
-	// sa.sa_handler = 0;
+	sigemptyset(&block_mask);
+	sigaddset(&block_mask, SIGINT);
+	sigaddset(&block_mask, SIGQUIT);
+	sa.sa_handler = 0;
 	sa.sa_flags = SA_SIGINFO;
-	// sa.sa_mask = block_mask;
+	sa.sa_mask = block_mask;
 	sa.sa_sigaction = &signal_handler;
-	// sigaction(SIGUSR1, &sa, NULL);
-	// sigaction(SIGUSR2, &sa, NULL);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
 		-1)
 		exit(ft_printf("Error setting up signal handler\n"));
