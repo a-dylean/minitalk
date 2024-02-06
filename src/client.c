@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/05 16:26:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/06 13:03:03 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			g_bit_received;
 
-static void	send_bit(pid_t pid, int bit)
+void	send_bit(pid_t pid, int bit)
 {
 	int	signal;
 
@@ -23,19 +23,21 @@ static void	send_bit(pid_t pid, int bit)
 	else
 		signal = SIGUSR2;
 	if (kill(pid, signal) == -1)
-		exit(ft_printf("Error sending signal\\n"));
+		exit(ft_printf("Error sending signal\n"));
 }
 
-static void	ft_send_char(pid_t pid, char c)
+void	ft_send_char(pid_t pid, char c)
 {
 	int	i;
 
-	i = 8;
-	while (i--)
+	i = 7;
+	while (i >= 0)
 	{
+		g_bit_received = 0;
 		send_bit(pid, (c >> i) & 1);
 		while (!g_bit_received)
 			;
+		i--;
 	}
 }
 
