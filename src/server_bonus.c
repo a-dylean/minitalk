@@ -6,15 +6,15 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 12:26:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:42:11 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
-static void ft_print_pid(void)
+static	void	ft_print_pid(void)
 {
-	pid_t server_pid;
+	pid_t	server_pid;
 
 	server_pid = getpid();
 	ft_putstr_fd("Server PID: ", 1);
@@ -47,7 +47,7 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 
 int	main(int argc, char **argv)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	(void)argv;
 	if (argc == 1)
