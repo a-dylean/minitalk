@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 14:01:48 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:09:54 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	ft_send_bit(pid_t pid, char c)
 	int	signal;
 
 	bit = 0;
-	while (bit < 8)
+	while (bit < CHAR_BIT)
 	{
 		if ((1 & (c >> bit)) != 0)
 			signal = SIGUSR1;

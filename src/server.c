@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 14:02:03 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:35:53 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static	void	ft_print_pid(void)
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
 	static int	bit_count;
-	static char	temp_char;
+	static unsigned char	temp_char;
 	pid_t		client_pid;
 
 	(void)context;
@@ -34,7 +34,7 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 	if (signal == SIGUSR1)
 		temp_char |= (1 << bit_count);
 	bit_count++;
-	if (bit_count == 8)
+	if (bit_count == CHAR_BIT)
 	{
 		ft_putchar_fd(temp_char, 1);
 		bit_count = 0;
