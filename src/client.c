@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 15:09:54 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:49:28 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@ static void	ft_send_bit(pid_t pid, char c)
 			signal = SIGUSR1;
 		else
 			signal = SIGUSR2;
-		if (kill(pid, signal) == -1)
-		{
-			ft_putstr_fd("Error sending signal\n", 1);
-			exit(EXIT_FAILURE);
-		}
+		ft_send_signal(pid, signal);
 		usleep(100);
 		bit++;
 	}

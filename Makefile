@@ -4,10 +4,10 @@ LIBFT = libft/libft.a
 PRINTF = libft/ft_printf/ft_printf.a
 INCLUDES = -I includes -I libft -I libft/ft_printf
 
-SRCS_SERVER = src/server.c
-SRCS_CLIENT = src/client.c
-SRCS_SERVER_BONUS = src/server_bonus.c
-SRCS_CLIENT_BONUS = src/client_bonus.c
+SRCS_SERVER = src/server.c src/utils.c
+SRCS_CLIENT = src/client.c src/utils.c
+SRCS_SERVER_BONUS = src/server_bonus.c src/utils.c
+SRCS_CLIENT_BONUS = src/client_bonus.c src/utils.c
 OBJS_SERVER = $(SRCS_SERVER:.c=.o)
 OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
 OBJS_SERVER_BONUS = $(SRCS_SERVER_BONUS:.c=.o)

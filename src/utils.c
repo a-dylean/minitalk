@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/30 14:16:29 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 18:45:06 by atonkopi         ###   ########.fr       */
+/*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
+/*   Updated: 2024/02/07 18:45:13 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
-# include "../libft/libft.h"
-# include <limits.h>
-# include <signal.h>
-# include <stdlib.h>
-# include <sys/types.h>
+#include "../include/minitalk.h"
 
-void	ft_send_signal(pid_t pid, int signal);
-
-#endif
+void	ft_send_signal(pid_t pid, int signal)
+{
+	if (kill(pid, signal) == -1)
+	{
+		ft_putstr_fd("Error sending signal\n", 1);
+		exit(EXIT_FAILURE);
+	}
+}

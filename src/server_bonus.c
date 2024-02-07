@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 18:32:56 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:44:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,11 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 		if (temp_char != '\0')
 		{
 			ft_putchar_fd(temp_char, 1);
-			kill(client_pid, SIGUSR1);
+			signal = SIGUSR1;
 		}
 		else
-			kill(client_pid, SIGUSR2);
+			signal = SIGUSR2;
+		ft_send_signal(client_pid, signal);
 		bit_count = 0;
 		temp_char = 0;
 	}
