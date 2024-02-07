@@ -39,7 +39,7 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 	{
 		if (temp_char != '\0')
 		{
-			ft_putchar_fd(temp_char, 1);
+			t_putchar_fdf(temp_char, 1);
 			signal = SIGUSR1;
 		}
 		else

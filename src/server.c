@@ -28,10 +28,9 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
 	static int				bit_count;
 	static unsigned char	temp_char;
-	pid_t					client_pid;
 
 	(void)context;
-	client_pid = info->si_pid;
+	(void)info;
 	if (signal == SIGUSR1)
 		temp_char |= (1 << bit_count);
 	bit_count++;
