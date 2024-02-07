@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 18:43:12 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 19:11:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&sa, sizeof(struct sigaction));
 	sa.sa_handler = &ft_handle_server_signal;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa,
-				NULL) == -1)
+			NULL) == -1)
 	{
 		ft_putstr_fd("Error setting up signal handler\n", 1);
 		exit(EXIT_FAILURE);
