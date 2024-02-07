@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:01:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2023/11/27 15:57:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 17:10:51 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ char	*ft_itoa(int n)
 	int		i;
 	long	nb;
 
+	nb = (long)n;
 	i = get_str_len(n);
 	str = malloc((i + 1) * sizeof(char));
-	nb = (long)n;
 	if (!str)
 		return (NULL);
 	str[i--] = '\0';

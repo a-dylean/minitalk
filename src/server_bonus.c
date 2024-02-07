@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 15:10:00 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 17:16:37 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 static	void	ft_print_pid(void)
 {
-	pid_t	server_pid;
+	char *server_pid;
 
-	server_pid = getpid();
+	server_pid = ft_itoa(getpid());
 	ft_putstr_fd("Server PID: ", 1);
-	ft_putstr_fd(ft_itoa(server_pid), 1);
+	ft_putstr_fd(server_pid, 1);
+	free(server_pid);
 	ft_putchar_fd('\n', 1);
 	ft_putstr_fd("Waiting for the client...\n", 1);
 }
