@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 15:09:48 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:28:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 static void	ft_handle_server_signal(int signal)
 {
 	if (signal == SIGUSR1)
-		ft_putstr_fd("Message received by the server\n", 1);
-	exit(EXIT_SUCCESS);
+		ft_putstr_fd("Bit received by the server\n", 1);
+	if (signal == SIGUSR2)
+		ft_putstr_fd("Whole message printed by the server\n", 1);
 }
 
 static void	ft_send_bit(pid_t pid, char c)
@@ -79,7 +80,8 @@ int	main(int argc, char **argv)
 	}
 	ft_bzero(&sa, sizeof(struct sigaction));
 	sa.sa_handler = &ft_handle_server_signal;
-	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa,
+				NULL) == -1)
 	{
 		ft_putstr_fd("Error setting up signal handler\n", 1);
 		exit(EXIT_FAILURE);
