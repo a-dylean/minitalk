@@ -6,11 +6,13 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/08 13:00:50 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:03:58 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
+
+t_node					*queue;
 
 static void	ft_print_pid(void)
 {
@@ -32,8 +34,11 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 
 	(void)context;
 	client_pid = info->si_pid;
-	if (signal == SIGUSR1)
+	//printf("Signal: %d\n", signal);
+	if (signal == SIGUSR1 || signal == SIGUSR2)
 		temp_char |= (1 << bit_count);
+		//ft_enqueue(signal, queue);
+		
 	bit_count++;
 	if (bit_count == CHAR_BIT)
 	{
@@ -67,6 +72,8 @@ int	main(int argc, char **argv)
 			exit(EXIT_FAILURE);
 		}
 		ft_print_pid();
+		// queue = ft_init_queue();
+		// ft_print_queue(queue);
 		while (1)
 			pause();
 	}
