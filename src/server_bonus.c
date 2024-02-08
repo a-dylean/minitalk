@@ -36,7 +36,7 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 	client_pid = info->si_pid;
 	//printf("Signal: %d\n", signal);
 	if (signal == SIGUSR1 || signal == SIGUSR2)
-		temp_char |= (1 << bit_count);
+		//temp_char |= (1 << bit_count);
 		//ft_enqueue(signal, queue);
 		
 	bit_count++;
