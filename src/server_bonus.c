@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/09 18:08:27 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:57:21 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	main(int argc, char **argv)
 	if (argc == 1)
 	{
 		data = ft_init_data();
+		//int arr[CHAR_BIT] = {0,1,1,0,0,0,0,1};
+		//printf("Char: %c\n", ft_binary_to_char(arr));
 		ft_bzero(&sa, sizeof(struct sigaction));
 		sa.sa_flags = SA_SIGINFO;
 		sa.sa_sigaction = &ft_handle_client_signal;
