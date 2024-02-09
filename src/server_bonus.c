@@ -6,53 +6,49 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/08 17:03:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:08:27 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
-t_node					*queue;
+t_data		*data;
 
-static void	ft_print_pid(void)
+static void	ft_update_data(int signal)
 {
-	char	*server_pid;
-
-	server_pid = ft_itoa(getpid());
-	ft_putstr_fd("Server PID: ", 1);
-	ft_putstr_fd(server_pid, 1);
-	free(server_pid);
-	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("Waiting for the client...\n", 1);
-}
-
-static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
-{
-	static int				bit_count;
-	static unsigned char	temp_char;
-	pid_t					client_pid;
-
-	(void)context;
-	client_pid = info->si_pid;
-	//printf("Signal: %d\n", signal);
-	if (signal == SIGUSR1 || signal == SIGUSR2)
-		//temp_char |= (1 << bit_count);
-		//ft_enqueue(signal, queue);
-		
-	bit_count++;
-	if (bit_count == CHAR_BIT)
+	if (ft_queue_is_full(data))
 	{
-		if (temp_char != '\0')
+		//ft_print_queue(data);
+		data->temp_char = ft_binary_to_char(data->buffer);
+		//printf("temp_char: %c\n", data->temp_char);
+		if (data->temp_char != '\0')
 		{
-			ft_putchar_fd(temp_char, 1);
+			ft_putchar_fd(data->temp_char, 1);
 			signal = SIGUSR1;
 		}
 		else
 			signal = SIGUSR2;
-		ft_send_signal(client_pid, signal);
-		bit_count = 0;
-		temp_char = 0;
+		ft_send_signal(data->client_pid, signal);
+		usleep(100);
+		// while (!ft_queue_is_empty(data))
+		// 	ft_dequeue(data);
+		ft_init_queue(data);
+		//data->temp_char = '\0';
 	}
+	ft_enqueue(data, signal);
+	
+}
+
+static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
+{
+	(void)context;
+	if (info->si_pid)
+		data->client_pid = info->si_pid;
+	if (signal == SIGUSR1)
+		ft_update_data(1);
+	else if (signal == SIGUSR2)
+		ft_update_data(0);
+	
 }
 
 int	main(int argc, char **argv)
@@ -62,6 +58,7 @@ int	main(int argc, char **argv)
 	(void)argv;
 	if (argc == 1)
 	{
+		data = ft_init_data();
 		ft_bzero(&sa, sizeof(struct sigaction));
 		sa.sa_flags = SA_SIGINFO;
 		sa.sa_sigaction = &ft_handle_client_signal;
@@ -72,8 +69,6 @@ int	main(int argc, char **argv)
 			exit(EXIT_FAILURE);
 		}
 		ft_print_pid();
-		// queue = ft_init_queue();
-		// ft_print_queue(queue);
 		while (1)
 			pause();
 	}

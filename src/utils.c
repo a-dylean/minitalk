@@ -6,11 +6,23 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/08 14:56:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:46:36 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
+
+void	ft_print_pid(void)
+{
+	char	*server_pid;
+
+	server_pid = ft_itoa(getpid());
+	ft_putstr_fd("Server PID: ", 1);
+	ft_putstr_fd(server_pid, 1);
+	free(server_pid);
+	ft_putchar_fd('\n', 1);
+	ft_putstr_fd("Waiting for the client...\n", 1);
+}
 
 void	ft_send_signal(pid_t pid, int signal)
 {
@@ -20,61 +32,76 @@ void	ft_send_signal(pid_t pid, int signal)
 		exit(EXIT_FAILURE);
 	}
 }
-
-t_node	*ft_init_queue(void)
+t_data	*ft_init_data(void)
 {
-	t_node	*new_node;
+	t_data	*data;
 
-	new_node = malloc(sizeof(t_node));
-	if (!new_node)
-		return (NULL);
-	//new_node->bit = i;
-	new_node->next = new_node;
-	return (new_node);
-}
-
-
-int ft_dequeue (t_node *symbol) 
-{
-   t_node *symbol_to_remove;
-   int i;
-   
-   symbol_to_remove = symbol->next;
-   i = symbol_to_remove->bit;
-   symbol->next = symbol_to_remove->next;
-   free (symbol_to_remove);
-   return i;  
-}
-
-t_node *ft_enqueue (int i, t_node *head_symbol) 
-{ 
-   t_node *new_symbol;
-   
-   new_symbol = malloc (sizeof (t_node));
-   if (!new_symbol)
-	return (NULL);
-   new_symbol->next = head_symbol->next;
-   head_symbol->next = new_symbol;
-   head_symbol->bit = i;
-   return new_symbol;
-}
-
-int ft_queue_is_empty(t_node *queue)
-{
-	if (queue->next == queue)
-		return (1);
-	return (0);
-}
-
-void ft_print_queue(t_node *queue)
-{
-	t_node *current;
-	current = queue->next;
-	while (current != queue)
+	data = malloc(sizeof(t_data));
+	if (!data)
 	{
-		ft_putnbr_fd(current->bit, 1);
-		ft_putchar_fd(' ', 1);
-		current = current->next;
+		ft_putstr_fd("Error allocating memory\n", 1);
+		exit(EXIT_FAILURE);
 	}
-	ft_putchar_fd('\n', 1);
+	// for (int i = 0; i < CHAR_BIT; i++) {
+	// 	data->buffer[i] = -1;
+	// }
+	return (data);
+}
+void	ft_init_queue(t_data *data)
+{
+	data->start = 0;
+	data->end = 0;
+}
+
+int	ft_dequeue(t_data *data)
+{
+	return (data->buffer[data->start++]);
+}
+
+void	ft_enqueue(t_data *data, int bit)
+{
+	data->buffer[data->end] = bit;
+	data->end++;
+}
+
+int	ft_queue_is_empty(t_data *data)
+{
+	return (data->start == data->end);
+}
+int	ft_queue_is_full(t_data *data)
+{
+	return (data->end == CHAR_BIT);
+}
+
+void	ft_print_queue(t_data *data)
+{
+	for (int i = 0; i < CHAR_BIT; i++)
+	{
+		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
+	}
+}
+
+int	ft_pow(int nb, int power)
+{
+	if (power < 0)
+		return (0);
+	if (power == 0)
+		return (1);
+	return (nb * ft_pow(nb, power - 1));
+}
+
+char	ft_binary_to_char(int *buffer)
+{
+	char result;
+	int i;
+
+	i = 7;
+	result = 0;
+	while (i >= 0)
+	{
+		if (buffer[i] == 1)
+			result += ft_pow(2, CHAR_BIT - 1 - i);
+		i--;
+	}
+	return (result);
 }

@@ -6,23 +6,11 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 19:09:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:59:04 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
-
-static void	ft_print_pid(void)
-{
-	char	*server_pid;
-
-	server_pid = ft_itoa(getpid());
-	ft_putstr_fd("Server PID: ", 1);
-	ft_putstr_fd(server_pid, 1);
-	free(server_pid);
-	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("Waiting for the client...\n", 1);
-}
 
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
