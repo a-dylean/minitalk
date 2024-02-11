@@ -45,6 +45,10 @@ t_data	*ft_init_data(void)
 	// for (int i = 0; i < CHAR_BIT; i++) {
 	// 	data->buffer[i] = -1;
 	// }
+	data->str = NULL;
+	data->len = 0;
+	data->bit_count = 0;
+	data->power = 0;
 	return (data);
 }
 void	ft_init_queue(t_data *data)
@@ -90,6 +94,21 @@ int	ft_pow(int nb, int power)
 	return (nb * ft_pow(nb, power - 1));
 }
 
+// int	ft_pow(int base, int power)
+// {
+// 	int	i;
+// 	int	res;
+
+// 	i = 0;
+// 	res = 1;
+// 	while (i < power)
+// 	{
+// 		res *= base;
+// 		i++;
+// 	}
+// 	return (res);
+// }
+
 void ft_reverse_buffer(int *buffer)
 {
 	int i;
@@ -119,7 +138,54 @@ char	ft_binary_to_char(int *buffer)
 	{
 		if (buffer[i] == 1)
 			result += ft_pow(2, CHAR_BIT - 1 - i);
+		//result += buffer[i] * ft_pow(2, CHAR_BIT - 1 - i);
 		i--;
 	}
 	return (result);
 }
+
+// void	ft_extend_str(t_data *data)
+// {
+// 	int		power;
+// 	char	*newstr;
+// 	int		len;
+
+// 	power = data->power + 1;
+// 	len = ft_pow(2, power);
+// 	newstr = (char *)malloc(sizeof(char) * len);
+// 	if (!newstr)
+// 		exit(EXIT_FAILURE);
+// 	ft_bzero(newstr, len);
+// 	ft_memcpy(newstr, data->str, data->len);
+// 	free(data->str);
+// 	data->str = newstr;
+// 	data->power = power;
+// 	data->len = ft_pow(2, power);
+// }
+
+// void	ft_add_buffer_to_str(t_data *db)
+// {
+// 	char	c;
+// 	int		i;
+
+// 	if (!db)
+// 		return ;
+// 	if (db->buffer[7] == -1)
+// 		return ;
+// 	if (db->str == NULL)
+// 		ft_extend_str(db);
+// 	if (db->str[db->len - 1] != '\0')
+// 		ft_extend_str(db);
+// 	c = ft_get_char(db->buffer);
+// 	i = 0;
+// 	while (db->str[i] != '\0')
+// 		i++;
+// 	db->str[i] = c;
+// 	ft_reset_buffer(db->buffer);
+// 	if (c == '\0')
+// 	{
+// 		ft_printf("%s\n", db->str);
+// 		ft_printf("bit received = %d\n", db->bit_count);
+// 		ft_init_data(db, db->pid);
+// 	}
+// }

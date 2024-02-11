@@ -23,8 +23,11 @@ typedef struct t_data
 	int		buffer[CHAR_BIT];
 	int		start;
 	int		end;
+	int len;
+	int power;
 	int bit_count;
 	char	temp_char;
+	char *str;
 	pid_t	client_pid;
 }			t_data;
 void		ft_print_pid(void);
@@ -37,6 +40,7 @@ int			ft_queue_is_empty(t_data *data);
 int			ft_queue_is_full(t_data *data);
 int			ft_pow(int nb, int power);
 char		ft_binary_to_char(int *buffer);
+void	ft_extend_str(t_data *data);
 // to remove
 void		ft_print_queue(t_data *data);
 void ft_reverse_buffer(int *buffer);

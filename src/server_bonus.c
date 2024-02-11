@@ -16,9 +16,20 @@ t_data		*data;
 
 static void	ft_update_data(int signal)
 {
+	//data->bit_count++;
 	if (ft_queue_is_full(data))
 	{
+		// if (data->str == NULL)
+		// 	ft_extend_str(data);
+		// if (data->str[data->len - 1] != '\0')
+		// 	ft_extend_str(data);
 		//ft_print_queue(data);
+		// data->temp_char = ft_binary_to_char(data->buffer);
+		// int i = 0;
+		// while (data->str[i] != '\0')
+		// 	i++;
+		//data->str[i] = data->temp_char;
+		//ft_reset_buffer(data->buffer);
 		data->temp_char = ft_binary_to_char(data->buffer);
 		//printf("temp_char: %c\n", data->temp_char);
 		if (data->temp_char != '\0')
@@ -36,7 +47,7 @@ static void	ft_update_data(int signal)
 		//data->temp_char = '\0';
 	}
 	ft_enqueue(data, signal);
-	
+	//usleep(100);
 }
 
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
@@ -48,7 +59,11 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 		ft_update_data(1);
 	else if (signal == SIGUSR2)
 		ft_update_data(0);
-	
+	else
+	{
+		ft_putstr_fd("Error receiving signal\n", 1);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	main(int argc, char **argv)
