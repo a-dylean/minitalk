@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/12 14:47:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/12 16:13:05 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,23 @@ t_data	*ft_init_data(void)
 		ft_putstr_fd("Error allocating memory\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	// for (int i = 0; i < CHAR_BIT; i++) {
-	// 	data->buffer[i] = -1;
-	// }
-	data->str = NULL;
-	data->len = 0;
-	data->bit_count = 0;
-	data->power = 0;
+	//ft_memset(data->buffer, -1, CHAR_BIT);
+	ft_init_queue(data);
+	//data->client_pid = 0;
+	//data->temp_char = 0;
+	// data->str = NULL;
+	// data->len = 0;
+	// data->bit_count = 0;
+	// data->power = 0;
 	return (data);
 }
 void	ft_init_queue(t_data *data)
 {
+	// if (ft_strlen(data->buffer) > 0)
+	// 	free(data->buffer);
+	for (int i = 0; i < CHAR_BIT; i++) {
+		data->buffer[i] = -1;
+	}
 	data->start = 0;
 	data->end = 0;
 }
@@ -93,21 +99,6 @@ int	ft_pow(int nb, int power)
 		return (1);
 	return (nb * ft_pow(nb, power - 1));
 }
-
-// int	ft_pow(int base, int power)
-// {
-// 	int	i;
-// 	int	res;
-
-// 	i = 0;
-// 	res = 1;
-// 	while (i < power)
-// 	{
-// 		res *= base;
-// 		i++;
-// 	}
-// 	return (res);
-// }
 
 char	ft_binary_to_char(t_data *data)
 {
