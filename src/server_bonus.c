@@ -17,7 +17,8 @@ t_data		*data;
 static void	ft_update_data(int signal)
 {
 	char temp_char;
-	ft_print_queue(data);
+	//ft_print_queue(data);
+	ft_enqueue(data, signal);
 	if (ft_queue_is_full(data))
 	{
 		temp_char = ft_binary_to_char(data);
@@ -31,10 +32,8 @@ static void	ft_update_data(int signal)
 		ft_send_signal(data->client_pid, signal);
 		usleep(100);
 		ft_init_queue(data);
-		ft_enqueue(data, signal);
-	} 
-	else 
-		ft_enqueue(data, signal);
+		//ft_enqueue(data, signal);
+	}	
 }
 
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
