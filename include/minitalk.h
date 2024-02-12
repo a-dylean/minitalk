@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:16:29 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/09 18:55:57 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:46:02 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ void		ft_enqueue(t_data *data, int bit);
 int			ft_queue_is_empty(t_data *data);
 int			ft_queue_is_full(t_data *data);
 int			ft_pow(int nb, int power);
-char		ft_binary_to_char(int *buffer);
+char		ft_binary_to_char(t_data *data);
 void	ft_extend_str(t_data *data);
 // to remove
 void		ft_print_queue(t_data *data);
-void ft_reverse_buffer(int *buffer);
 #endif

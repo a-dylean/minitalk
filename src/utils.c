@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/09 19:01:50 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:47:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,37 +109,20 @@ int	ft_pow(int nb, int power)
 // 	return (res);
 // }
 
-void ft_reverse_buffer(int *buffer)
-{
-	int i;
-	int j;
-	int temp;
-
-	i = 0;
-	j = CHAR_BIT - 1;
-	while (i < j)
-	{
-		temp = buffer[i];
-		buffer[i] = buffer[j];
-		buffer[j] = temp;
-		i++;
-		j--;
-	}
-}
-char	ft_binary_to_char(int *buffer)
+char	ft_binary_to_char(t_data *data)
 {
 	char result;
 	int i;
+	int bit;
 	
 	i = 7;
 	result = 0;
-	ft_reverse_buffer(buffer);
+	bit = 0;
 	while (i >= 0)
 	{
-		printf("!!Buffer[%d]: %d\n", i, buffer[i]);
-		if (buffer[i] == 1)
+		bit = ft_dequeue(data);
+		if (bit == 1)
 			result += ft_pow(2, CHAR_BIT - 1 - i);
-		//result += buffer[i] * ft_pow(2, CHAR_BIT - 1 - i);
 		i--;
 	}
 	return (result);

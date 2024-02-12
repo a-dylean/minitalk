@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/09 18:57:21 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:45:28 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@ static void	ft_update_data(int signal)
 		// 	ft_extend_str(data);
 		// if (data->str[data->len - 1] != '\0')
 		// 	ft_extend_str(data);
-		ft_print_queue(data);
+		//ft_print_queue(data);
 		// data->temp_char = ft_binary_to_char(data->buffer);
 		// int i = 0;
 		// while (data->str[i] != '\0')
 		// 	i++;
 		//data->str[i] = data->temp_char;
 		//ft_reset_buffer(data->buffer);
-		data->temp_char = ft_binary_to_char(data->buffer);
+		data->temp_char = ft_binary_to_char(data);
 		//printf("temp_char: %c\n", data->temp_char);
-		//if (data->temp_char != '\0')
-		//{
+		if (data->temp_char != '\0')
+		{
 			ft_putchar_fd(data->temp_char, 1);
 			signal = SIGUSR1;
-		//}
-		//else
-		//	signal = SIGUSR2;
+		}
+		else
+			signal = SIGUSR2;
 		ft_send_signal(data->client_pid, signal);
 		usleep(100);
 		// while (!ft_queue_is_empty(data))
@@ -76,8 +76,6 @@ int	main(int argc, char **argv)
 	if (argc == 1)
 	{
 		data = ft_init_data();
-		int arr[CHAR_BIT] = {0,1,1,0,0,0,0,1};
-		printf("Char: %c\n", ft_binary_to_char(arr));
 		ft_bzero(&sa, sizeof(struct sigaction));
 		sa.sa_flags = SA_SIGINFO;
 		sa.sa_sigaction = &ft_handle_client_signal;
