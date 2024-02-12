@@ -133,9 +133,10 @@ char	ft_binary_to_char(int *buffer)
 	
 	i = 7;
 	result = 0;
-	//ft_reverse_buffer(buffer);
+	ft_reverse_buffer(buffer);
 	while (i >= 0)
 	{
+		printf("!!Buffer[%d]: %d\n", i, buffer[i]);
 		if (buffer[i] == 1)
 			result += ft_pow(2, CHAR_BIT - 1 - i);
 		//result += buffer[i] * ft_pow(2, CHAR_BIT - 1 - i);
@@ -143,6 +144,7 @@ char	ft_binary_to_char(int *buffer)
 	}
 	return (result);
 }
+
 
 // void	ft_extend_str(t_data *data)
 // {
