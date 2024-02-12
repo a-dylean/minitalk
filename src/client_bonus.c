@@ -20,7 +20,7 @@ static void	ft_handle_server_signal(int signal)
 		ft_putstr_fd("Whole message printed by the server\n", 1);
 }
 
-static void	ft_send_bit(pid_t pid, char c)
+static void	ft_send_bits(pid_t pid, char c)
 {
 	int	bit;
 	int	signal;
@@ -33,6 +33,7 @@ static void	ft_send_bit(pid_t pid, char c)
 		else
 			signal = SIGUSR2;
 		ft_send_signal(pid, signal);
+		//pause();
 		usleep(100);
 		bit++;
 	}
@@ -45,11 +46,11 @@ static void	ft_send_str(pid_t pid, char *str)
 	i = 0;
 	while (str[i])
 	{
-		ft_send_bit(pid, str[i]);
+		ft_send_bits(pid, str[i]);
 		i++;
 	}
-	ft_send_bit(pid, '\n');
-	ft_send_bit(pid, '\0');
+	ft_send_bits(pid, '\n');
+	ft_send_bits(pid, '\0');
 }
 
 static void	ft_validate_input(int argc, char **argv)
