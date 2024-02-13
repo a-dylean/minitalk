@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/13 14:18:36 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:32:15 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	ft_send_bits(pid_t pid, char c)
 		else
 			signal = SIGUSR2;
 		ft_send_signal(pid, signal);
-		//pause();
 		usleep(100);
 		bit++;
 	}

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/13 12:14:56 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:07:55 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ t_data	*ft_init_data(void)
 	}
 	//ft_memset(data->buffer, -1, CHAR_BIT);
 	ft_init_queue(data);
-	data->str = ft_strdup("");
+	//data->str = ft_strdup("");
+	data->str = malloc(2);
 	//data->client_pid = 0;
 	//data->temp_char = 0;
 	data->str_len = 0;
