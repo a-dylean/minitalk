@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/12 16:13:05 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:14:56 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ t_data	*ft_init_data(void)
 	}
 	//ft_memset(data->buffer, -1, CHAR_BIT);
 	ft_init_queue(data);
+	data->str = ft_strdup("");
 	//data->client_pid = 0;
 	//data->temp_char = 0;
-	// data->str = NULL;
-	// data->len = 0;
+	data->str_len = 0;
 	// data->bit_count = 0;
 	// data->power = 0;
 	return (data);
@@ -139,7 +139,7 @@ char	ft_binary_to_char(t_data *data)
 // 	data->len = ft_pow(2, power);
 // }
 
-// void	ft_add_buffer_to_str(t_data *db)
+// void	ft_add_buffer_to_str(t_data *data)
 // {
 // 	char	c;
 // 	int		i;
@@ -161,7 +161,6 @@ char	ft_binary_to_char(t_data *data)
 // 	if (c == '\0')
 // 	{
 // 		ft_printf("%s\n", db->str);
-// 		ft_printf("bit received = %d\n", db->bit_count);
 // 		ft_init_data(db, db->pid);
 // 	}
 // }

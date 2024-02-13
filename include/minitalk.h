@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:16:29 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/12 15:45:01 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:31:09 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ typedef struct t_data
 	int		buffer[CHAR_BIT];
 	int		start;
 	int		end;
-	// int len;
+	int str_len;
 	// int power;
 	// int bit_count;
 	//char	temp_char;
-	//char *str;
+	char *str;
 	pid_t	client_pid;
 }			t_data;
 void		ft_print_pid(void);
