@@ -14,76 +14,35 @@
 
 t_data		*data;
 
-void	ft_add_char_to_str(t_data *data, char c)
+static void	ft_update_data(pid_t client_pid, int signal)
 {
-	char	*new_str;
-
-	if (c == '\0')
-		ft_putstr_fd(data->str, 1);
-	if (data->str_len == 0)
-	{
-		ft_strlcpy(data->str, &c, 2);
-		data->str_len++;
-	}
-	else
-	{
-		new_str = malloc((data->str_len + 2));
-		if (!new_str)
-		{
-			ft_putstr_fd("Error allocating memory\n", 1);
-			exit(EXIT_FAILURE);
-		}
-		//if (data->str)
-		ft_strlcpy(new_str, data->str, data->str_len + 2);
-		new_str[data->str_len] = c;
-		new_str[data->str_len + 1] = '\0';
-		// free(data->str);
-		data->str = new_str;
-		data->str_len++;
-		// free(new_str);
-	}
-}
-
-static void	ft_update_data(int signal)
-{
-	char	temp_char;
-
+	//char	temp_char;
+	if(data == NULL)
+		data = ft_init_struct(client_pid);
+	if (data->client_pid != client_pid)
+		ft_init_data(data, client_pid);
 	ft_enqueue(data, signal);
 	if (ft_queue_is_full(data))
-	{
-		temp_char = ft_binary_to_char(data);
-		// printf("temp_char: %c\n", temp_char);
-		ft_add_char_to_str(data, temp_char);
-		ft_init_queue(data);
-		if (temp_char == '\0')
-		{
-			free(data->str);
-			free(data);
-			data = ft_init_data();
-			// data->str = ft_strdup("");
-			// data->str_len = 0;
-			// ft_init_queue(data);
-		}
-		// ft_send_signal(data->client_pid, signal);
-		// usleep(100);
-	}
-	// if (signal)
-	// 	signal = SIGUSR1;
-	// else
-	//
-	// ft_send_signal(data->client_pid, signal);
-	// usleep(100);
+		ft_add_buffer_to_str(data);
+	usleep(100);
+	if (signal)
+		//signal = SIGUSR1;
+		kill(data->client_pid, SIGUSR1);
+	else
+		//signal = SIGUSR2;
+		kill(data->client_pid, SIGUSR2);
+	//ft_send_signal(data->client_pid, signal);
 }
 
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
 	(void)context;
-	if (info->si_pid)
-		data->client_pid = info->si_pid;
+	// if (info->si_pid)
+	// 	data->client_pid = info->si_pid;
 	if (signal == SIGUSR1)
-		ft_update_data(1);
+		ft_update_data(info->si_pid, 1);
 	else if (signal == SIGUSR2)
-		ft_update_data(0);
+		ft_update_data(info->si_pid, 0);
 	else
 	{
 		ft_putstr_fd("Error receiving signal\n", 1);
@@ -98,19 +57,23 @@ int	main(int argc, char **argv)
 	(void)argv;
 	if (argc == 1)
 	{
-		data = ft_init_data();
-		ft_bzero(&sa, sizeof(struct sigaction));
+		data = ft_init_struct(-1);
+		//ft_bzero(&sa, sizeof(struct sigaction));
 		sa.sa_flags = SA_SIGINFO;
 		sa.sa_sigaction = &ft_handle_client_signal;
-		if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa,
-				NULL) == -1)
-		{
-			ft_putstr_fd("Error setting up signal handler\n", 1);
-			exit(EXIT_FAILURE);
-		}
+		sigemptyset(&sa.sa_mask);
+		
 		ft_print_pid();
 		while (1)
+		{
+			if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1 || sigaction(SIGINT, &sa, NULL) == -1)
+			{
+				ft_putstr_fd("Error setting up signal handler\n", 1);
+				exit(EXIT_FAILURE);
+			}
 			pause();
+		}
+			
 	}
 	else
 	{

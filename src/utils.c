@@ -32,33 +32,43 @@ void	ft_send_signal(pid_t pid, int signal)
 		exit(EXIT_FAILURE);
 	}
 }
-t_data	*ft_init_data(void)
+t_data	*ft_init_struct(int pid)
 {
 	t_data	*data;
 
-	data = malloc(sizeof(t_data));
+	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)
 	{
 		ft_putstr_fd("Error allocating memory\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	//ft_memset(data->buffer, -1, CHAR_BIT);
 	ft_init_queue(data);
-	//data->str = ft_strdup("");
-	data->str = malloc(2);
-	//data->client_pid = 0;
-	//data->temp_char = 0;
-	data->str_len = 0;
-	// data->bit_count = 0;
-	// data->power = 0;
+	ft_init_data(data, pid);
 	return (data);
+	
+}
+
+void ft_init_data(t_data *data, pid_t pid)
+{
+	if (data == NULL)
+		return ;
+	if (data->str != NULL)
+		free(data->str);
+	data->str = NULL;
+	data->client_pid = pid;
+	data->str_len = 0;
+	data->power = 0;
+	ft_init_queue(data);
 }
 void	ft_init_queue(t_data *data)
 {
-	// if (ft_strlen(data->buffer) > 0)
-	// 	free(data->buffer);
-	for (int i = 0; i < CHAR_BIT; i++) {
+	int	i;
+
+	i = 0;
+	while (i < CHAR_BIT)
+	{
 		data->buffer[i] = -1;
+		i++;
 	}
 	data->start = 0;
 	data->end = 0;
@@ -121,47 +131,48 @@ char	ft_binary_to_char(t_data *data)
 }
 
 
-// void	ft_extend_str(t_data *data)
-// {
-// 	int		power;
-// 	char	*newstr;
-// 	int		len;
+void	ft_extend_str(t_data *data)
+{
+	int		power;
+	char	*newstr;
+	int		len;
 
-// 	power = data->power + 1;
-// 	len = ft_pow(2, power);
-// 	newstr = (char *)malloc(sizeof(char) * len);
-// 	if (!newstr)
-// 		exit(EXIT_FAILURE);
-// 	ft_bzero(newstr, len);
-// 	ft_memcpy(newstr, data->str, data->len);
-// 	free(data->str);
-// 	data->str = newstr;
-// 	data->power = power;
-// 	data->len = ft_pow(2, power);
-// }
+	power = data->power + 1;
+	len = ft_pow(2, power);
+	newstr = (char *)malloc(sizeof(char) * len);
+	if (!newstr)
+		exit(EXIT_FAILURE);
+	ft_bzero(newstr, len);
+	ft_memcpy(newstr, data->str, data->str_len);
+	free(data->str);
+	data->str = newstr;
+	data->power = power;
+	data->str_len = ft_pow(2, power);
+}
 
-// void	ft_add_buffer_to_str(t_data *data)
-// {
-// 	char	c;
-// 	int		i;
+void	ft_add_buffer_to_str(t_data *data)
+{
+	char	c;
+	int		i;
 
-// 	if (!db)
-// 		return ;
-// 	if (db->buffer[7] == -1)
-// 		return ;
-// 	if (db->str == NULL)
-// 		ft_extend_str(db);
-// 	if (db->str[db->len - 1] != '\0')
-// 		ft_extend_str(db);
-// 	c = ft_get_char(db->buffer);
-// 	i = 0;
-// 	while (db->str[i] != '\0')
-// 		i++;
-// 	db->str[i] = c;
-// 	ft_reset_buffer(db->buffer);
-// 	if (c == '\0')
-// 	{
-// 		ft_printf("%s\n", db->str);
-// 		ft_init_data(db, db->pid);
-// 	}
-// }
+	if (!data)
+		return ;
+	if (data->buffer[7] == -1)
+		return ;
+	if (data->str == NULL)
+		ft_extend_str(data);
+	if (data->str[data->str_len - 1] != '\0')
+		ft_extend_str(data);
+	c =  ft_binary_to_char(data);
+	i = 0;
+	while (data->str[i] != '\0')
+		i++;
+	data->str[i] = c;
+	printf("STR: %s\n", data->str);
+	ft_init_queue(data);
+	if (c == '\0')
+	{
+		ft_printf("%s\n", data->str);
+		ft_init_data(data, data->client_pid);
+	}
+}
