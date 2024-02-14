@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/13 16:07:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:21:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_data	*ft_init_struct(int pid)
 {
 	t_data	*data;
 
-	data = (t_data *)malloc(sizeof(t_data));
+	data = malloc(sizeof(t_data));
 	if (!data)
 	{
 		ft_putstr_fd("Error allocating memory\n", 1);
@@ -45,11 +45,12 @@ t_data	*ft_init_struct(int pid)
 	ft_init_queue(data);
 	ft_init_data(data, pid);
 	return (data);
-	
 }
 
-void ft_init_data(t_data *data, pid_t pid)
+void	ft_init_data(t_data *data, pid_t pid)
 {
+	int	i;
+
 	if (data == NULL)
 		return ;
 	if (data->str != NULL)
@@ -59,17 +60,15 @@ void ft_init_data(t_data *data, pid_t pid)
 	data->str_len = 0;
 	data->power = 0;
 	ft_init_queue(data);
-}
-void	ft_init_queue(t_data *data)
-{
-	int	i;
-
 	i = 0;
 	while (i < CHAR_BIT)
 	{
 		data->buffer[i] = -1;
 		i++;
 	}
+}
+void	ft_init_queue(t_data *data)
+{
 	data->start = 0;
 	data->end = 0;
 }
@@ -113,11 +112,11 @@ int	ft_pow(int nb, int power)
 
 char	ft_binary_to_char(t_data *data)
 {
-	char result;
-	int i;
-	int bit;
-	
-	i = 7;
+	char	result;
+	int		i;
+	int		bit;
+
+	i = CHAR_BIT - 1;
 	result = 0;
 	bit = 0;
 	while (i >= 0)
@@ -130,7 +129,6 @@ char	ft_binary_to_char(t_data *data)
 	return (result);
 }
 
-
 void	ft_extend_str(t_data *data)
 {
 	int		power;
@@ -139,7 +137,7 @@ void	ft_extend_str(t_data *data)
 
 	power = data->power + 1;
 	len = ft_pow(2, power);
-	newstr = (char *)malloc(sizeof(char) * len);
+	newstr = malloc(len);
 	if (!newstr)
 		exit(EXIT_FAILURE);
 	ft_bzero(newstr, len);
@@ -152,27 +150,27 @@ void	ft_extend_str(t_data *data)
 
 void	ft_add_buffer_to_str(t_data *data)
 {
-	char	c;
-	int		i;
+	char c;
+	int i;
 
 	if (!data)
-		return ;
-	if (data->buffer[7] == -1)
 		return ;
 	if (data->str == NULL)
 		ft_extend_str(data);
 	if (data->str[data->str_len - 1] != '\0')
 		ft_extend_str(data);
-	c =  ft_binary_to_char(data);
+	c = ft_binary_to_char(data);
 	i = 0;
 	while (data->str[i] != '\0')
 		i++;
 	data->str[i] = c;
-	printf("STR: %s\n", data->str);
 	ft_init_queue(data);
 	if (c == '\0')
 	{
-		ft_printf("%s\n", data->str);
-		ft_init_data(data, data->client_pid);
+		ft_putstr_fd(data->str, 1);
+		free(data->str);
+		data->str = NULL;
+		data->str_len = 0;
+		data->power = 0;
 	}
 }

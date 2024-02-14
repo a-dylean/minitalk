@@ -6,19 +6,12 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/13 16:32:15 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:32:53 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
-// static void	ft_handle_server_signal(int signal)
-// {
-// 	if (signal == SIGUSR1)
-// 		ft_putstr_fd("Bit received by the server\n", 1);
-// 	if (signal == SIGUSR2)
-// 		ft_putstr_fd("Whole message printed by the server\n", 1);
-// }
 
 static void	ft_handle_server_signal(int signal)
 {

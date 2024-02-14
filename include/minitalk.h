@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:16:29 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/13 11:31:09 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:31:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,24 @@ typedef struct t_data
 	int		buffer[CHAR_BIT];
 	int		start;
 	int		end;
-	int str_len;
-	int power;
-	char *str;
+	int		str_len;
+	int		power;
+	char	*str;
 	pid_t	client_pid;
 }			t_data;
 void		ft_print_pid(void);
 void		ft_send_signal(pid_t pid, int signal);
-void	ft_init_queue(t_data *data);
-t_data	*ft_init_struct(int pid);
-void ft_init_data(t_data *data, pid_t pid);
+void		ft_init_queue(t_data *data);
+t_data		*ft_init_struct(int pid);
+void		ft_init_data(t_data *data, pid_t pid);
 int			ft_dequeue(t_data *data);
 void		ft_enqueue(t_data *data, int bit);
 int			ft_queue_is_empty(t_data *data);
 int			ft_queue_is_full(t_data *data);
 int			ft_pow(int nb, int power);
 char		ft_binary_to_char(t_data *data);
-void	ft_extend_str(t_data *data);
-void	ft_add_buffer_to_str(t_data *data);
+void		ft_extend_str(t_data *data);
+void		ft_add_buffer_to_str(t_data *data);
 // to remove
 void		ft_print_queue(t_data *data);
 #endif
