@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/14 13:26:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:57:15 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,20 @@ static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 	{
 		ft_update_data(info->si_pid, 1);
 		ft_send_signal(data->client_pid, SIGUSR1);
-		// usleep(100);
+		//usleep(100);
 	}
 	else if (signal == SIGUSR2)
 	{
 		ft_update_data(info->si_pid, 0);
 		ft_send_signal(data->client_pid, SIGUSR2);
-		// usleep(100);
+		//usleep(100);
 	}
 	else
 	{
 		ft_putstr_fd("Error receiving signal\n", 1);
 		exit(EXIT_FAILURE);
 	}
+	//usleep(100);
 }
 
 int	main(int argc, char **argv)

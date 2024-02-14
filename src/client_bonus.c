@@ -6,15 +6,17 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/14 13:32:53 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:41:59 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
 
-static void	ft_handle_server_signal(int signal)
+static void	ft_handle_server_signal(int signal, siginfo_t *info, void *context)
 {
+	(void)info;
+	(void)context;
 	if (signal == SIGUSR1)
 		ft_putstr_fd("Received 1\n", 1);
 	if (signal == SIGUSR2)
@@ -76,7 +78,9 @@ int	main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	ft_bzero(&sa, sizeof(struct sigaction));
-	sa.sa_handler = &ft_handle_server_signal;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = &ft_handle_server_signal;
+	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa,
 			NULL) == -1)
 	{
