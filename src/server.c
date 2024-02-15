@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/09 14:59:04 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/15 18:28:53 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,12 @@ int	main(int argc, char **argv)
 		sa.sa_sigaction = &ft_handle_client_signal;
 		if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa,
 				NULL) == -1)
-		{
-			ft_putstr_fd("Error setting up signal handler\n", 1);
-			exit(EXIT_FAILURE);
-		}
+			ft_handle_error("Error setting up signal handler\n");
 		ft_print_pid();
 		while (1)
 			pause();
 	}
 	else
-	{
-		ft_putstr_fd("Wrong input! Correct usage: ./server \n", 1);
-		exit(EXIT_FAILURE);
-	}
+		ft_handle_error("Wrong input! Correct usage: ./server \n");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:16:29 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/14 13:31:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/15 18:23:19 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int			ft_pow(int nb, int power);
 char		ft_binary_to_char(t_data *data);
 void		ft_extend_str(t_data *data);
 void		ft_add_buffer_to_str(t_data *data);
+void		ft_handle_error(char *error_message);
 // to remove
 void		ft_print_queue(t_data *data);
 #endif

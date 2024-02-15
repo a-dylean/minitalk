@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/14 13:21:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/15 18:33:30 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ void	ft_print_pid(void)
 void	ft_send_signal(pid_t pid, int signal)
 {
 	if (kill(pid, signal) == -1)
-	{
-		ft_putstr_fd("Error sending signal\n", 1);
-		exit(EXIT_FAILURE);
-	}
+		ft_handle_error("Error sending signal\n");
 }
 t_data	*ft_init_struct(int pid)
 {
@@ -38,10 +35,7 @@ t_data	*ft_init_struct(int pid)
 
 	data = malloc(sizeof(t_data));
 	if (!data)
-	{
-		ft_putstr_fd("Error allocating memory\n", 1);
-		exit(EXIT_FAILURE);
-	}
+		ft_handle_error("Malloc failed\n");
 	ft_init_queue(data);
 	ft_init_data(data, pid);
 	return (data);
@@ -93,13 +87,13 @@ int	ft_queue_is_full(t_data *data)
 	return (data->end == CHAR_BIT);
 }
 
-void	ft_print_queue(t_data *data)
-{
-	for (int i = 0; i < CHAR_BIT; i++)
-	{
-		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
-	}
-}
+// void	ft_print_queue(t_data *data)
+// {
+// 	for (int i = 0; i < CHAR_BIT; i++)
+// 	{
+// 		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
+// 	}
+// }
 
 int	ft_pow(int nb, int power)
 {
@@ -139,7 +133,7 @@ void	ft_extend_str(t_data *data)
 	len = ft_pow(2, power);
 	newstr = malloc(len);
 	if (!newstr)
-		exit(EXIT_FAILURE);
+		ft_handle_error("Malloc failed\n");
 	ft_bzero(newstr, len);
 	ft_memcpy(newstr, data->str, data->str_len);
 	free(data->str);
@@ -173,4 +167,10 @@ void	ft_add_buffer_to_str(t_data *data)
 		data->str_len = 0;
 		data->power = 0;
 	}
+}
+
+void ft_handle_error(char *error_message)
+{
+	ft_putstr_fd(error_message, 1);
+	exit(EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/07 18:49:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/15 18:32:57 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,7 @@ static void	ft_send_str(pid_t pid, char *str)
 static void	ft_validate_input(int argc, char **argv)
 {
 	if (argc != 3 || !ft_str_isnumeric(argv[1]) || !argv[2][0])
-	{
-		ft_putstr_fd("Wrong input!\n", 1);
-		ft_putstr_fd("Usage: ./client [SERVER PID] [MESSAGE TO SEND]\n", 1);
-		exit(EXIT_FAILURE);
-	}
+		ft_handle_error("Wrong input! Usage: ./client [SERVER PID] [MESSAGE TO SEND]\n");
 }
 
 int	main(int argc, char **argv)
@@ -60,10 +56,7 @@ int	main(int argc, char **argv)
 	ft_validate_input(argc, argv);
 	server_pid = ft_atoi(argv[1]);
 	if (kill(server_pid, 0) == -1 || server_pid == 0)
-	{
-		ft_putstr_fd("Invalid server PID\n", 1);
-		exit(EXIT_FAILURE);
-	}
+		ft_handle_error("Invalid server PID\n");
 	ft_send_str(server_pid, argv[2]);
 	return (0);
 }
