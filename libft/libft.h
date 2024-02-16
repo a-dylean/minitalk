@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 10:55:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/06 13:14:18 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:52:49 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_str_isnumeric(char *str);
+int		ft_pow(int nb, int power);
 
 #endif

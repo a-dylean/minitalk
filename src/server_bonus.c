@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 16:27:40 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:57:04 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 t_data	*g_data;
 
-void	ft_update_data(pid_t client_pid, int signal)
+static void	ft_update_data(pid_t client_pid, int signal)
 {
-	(void)client_pid;
-	// if (data->client_pid != client_pid)
-	// 	data->client_pid = client_pid;
+	(void)client_pid;;
 	ft_enqueue(g_data, signal);
 	if (ft_queue_is_full(g_data))
 		ft_add_buffer_to_str(g_data);
@@ -28,7 +26,7 @@ void	ft_update_data(pid_t client_pid, int signal)
 		ft_send_signal(client_pid, SIGUSR2);
 }
 
-void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
+static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
 	(void)context;
 	if (signal == SIGUSR1)

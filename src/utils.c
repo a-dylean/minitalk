@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 16:40:47 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:51:36 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,6 @@ int	ft_queue_is_full(t_data *data)
 // 		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
 // 	}
 // }
-
-int	ft_pow(int nb, int power)
-{
-	if (power < 0)
-		return (0);
-	if (power == 0)
-		return (1);
-	return (nb * ft_pow(nb, power - 1));
-}
 
 char	ft_binary_to_char(t_data *data)
 {
