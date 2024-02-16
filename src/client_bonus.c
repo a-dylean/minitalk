@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 15:47:13 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:39:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ static void	ft_handle_server_signal(int signal, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	if (signal == SIGUSR1)
-		ft_putstr_fd("Received 1\n",  STDOUT_FILENO);
+		ft_putstr_fd("Received 1\n", STDOUT_FILENO);
 	else if (signal == SIGUSR2)
-		ft_putstr_fd("Received 0\n",  STDOUT_FILENO);
+		ft_putstr_fd("Received 0\n", STDOUT_FILENO);
+	else
+		ft_handle_error("Wrong signal received!\n");
+	
 }
 
 static void	ft_send_bits(pid_t pid, char c)
@@ -62,7 +65,6 @@ static void	ft_set_sigaction(void)
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = ft_handle_server_signal;
-	
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
 		-1 || sigaction(SIGINT, &sa, NULL) == -1)
 		ft_handle_error("Error setting up signal handler\n");
@@ -70,7 +72,7 @@ static void	ft_set_sigaction(void)
 
 int	main(int argc, char **argv)
 {
-	pid_t				server_pid;
+	pid_t	server_pid;
 
 	if (argc == 3 && argv[2][0])
 	{

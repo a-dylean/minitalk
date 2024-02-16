@@ -6,22 +6,22 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:45 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 15:22:29 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:27:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
-t_data	*data;
+t_data	*g_data;
 
 void	ft_update_data(pid_t client_pid, int signal)
 {
 	(void)client_pid;
 	// if (data->client_pid != client_pid)
 	// 	data->client_pid = client_pid;
-	ft_enqueue(data, signal);
-	if (ft_queue_is_full(data))
-		ft_add_buffer_to_str(data);
+	ft_enqueue(g_data, signal);
+	if (ft_queue_is_full(g_data))
+		ft_add_buffer_to_str(g_data);
 	if (signal)
 		ft_send_signal(client_pid, SIGUSR1);
 	else
@@ -58,7 +58,7 @@ int	main(int argc, char **argv)
 	ft_set_sigaction();
 	if (argc == 1)
 	{
-		data = ft_init_struct();
+		g_data = ft_init_struct();
 		ft_print_pid();
 		while (1)
 			pause();

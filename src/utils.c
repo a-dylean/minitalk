@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 15:15:56 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:40:47 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	ft_init_data(t_data *data)
 	if (data->str != NULL)
 		free(data->str);
 	data->str = NULL;
-	// data->client_pid = pid;
 	data->str_len = 0;
 	data->power = 0;
 	ft_init_queue(data);
@@ -61,6 +60,7 @@ void	ft_init_data(t_data *data)
 		i++;
 	}
 }
+
 void	ft_init_queue(t_data *data)
 {
 	data->start = 0;
@@ -87,13 +87,13 @@ int	ft_queue_is_full(t_data *data)
 	return (data->end == CHAR_BIT);
 }
 
-void	ft_print_queue(t_data *data)
-{
-	for (int i = 0; i < CHAR_BIT; i++)
-	{
-		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
-	}
-}
+// void	ft_print_queue(t_data *data)
+// {
+// 	for (int i = 0; i < CHAR_BIT; i++)
+// 	{
+// 		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
+// 	}
+// }
 
 int	ft_pow(int nb, int power)
 {
@@ -144,8 +144,8 @@ void	ft_allocate_memory(t_data *data)
 
 void	ft_add_buffer_to_str(t_data *data)
 {
-	char c;
-	int i;
+	char	c;
+	int		i;
 
 	if (!data)
 		return ;
