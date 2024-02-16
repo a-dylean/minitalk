@@ -6,12 +6,11 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/14 13:41:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:58:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
-
 
 static void	ft_handle_server_signal(int signal, siginfo_t *info, void *context)
 {
@@ -54,39 +53,33 @@ static void	ft_send_str(pid_t pid, char *str)
 	ft_send_bits(pid, '\n');
 	ft_send_bits(pid, '\0');
 }
-
-static void	ft_validate_input(int argc, char **argv)
+static void	ft_set_sigaction(void)
 {
-	if (argc != 3 || !ft_str_isnumeric(argv[1]) || !argv[2][0])
-	{
-		ft_putstr_fd("Wrong input!\n", 1);
-		ft_putstr_fd("Usage: ./client [SERVER PID] [MESSAGE TO SEND]\n", 1);
-		exit(EXIT_FAILURE);
-	}
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = ft_handle_server_signal;
+	
+	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
+		-1 || sigaction(SIGINT, &sa, NULL) == -1)
+		ft_handle_error("Error setting up signal handler\n");
 }
 
 int	main(int argc, char **argv)
 {
 	pid_t				server_pid;
-	struct sigaction	sa;
 
-	ft_validate_input(argc, argv);
-	server_pid = ft_atoi(argv[1]);
-	if (kill(server_pid, 0) == -1 || server_pid == 0)
+	if (argc == 3 && argv[2][0])
 	{
-		ft_putstr_fd("Invalid server PID\n", 1);
-		exit(EXIT_FAILURE);
+		server_pid = ft_atoi(argv[1]);
+		if (kill(server_pid, 0) == -1 || server_pid <= 0)
+			ft_handle_error("Invalid server PID\n");
+		ft_set_sigaction();
+		ft_send_str(server_pid, argv[2]);
 	}
-	ft_bzero(&sa, sizeof(struct sigaction));
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = &ft_handle_server_signal;
-	sigemptyset(&sa.sa_mask);
-	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa,
-			NULL) == -1)
-	{
-		ft_putstr_fd("Error setting up signal handler\n", 1);
-		exit(EXIT_FAILURE);
-	}
-	ft_send_str(server_pid, argv[2]);
+	else
+		ft_handle_error("Wrong input!\nCorrect usage: ./client [SERVER PID] [MESSAGE TO SEND]\n");
 	return (0);
 }
