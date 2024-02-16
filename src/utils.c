@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:43:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/15 18:33:30 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 15:15:56 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	ft_print_pid(void)
 	char	*server_pid;
 
 	server_pid = ft_itoa(getpid());
-	ft_putstr_fd("Server PID: ", 1);
-	ft_putstr_fd(server_pid, 1);
+	ft_putstr_fd("Server PID: ", STDOUT_FILENO);
+	ft_putstr_fd(server_pid, STDOUT_FILENO);
 	free(server_pid);
-	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("Waiting for the client...\n", 1);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+	ft_putstr_fd("Waiting for the client...\n", STDOUT_FILENO);
 }
 
 void	ft_send_signal(pid_t pid, int signal)
@@ -29,7 +29,7 @@ void	ft_send_signal(pid_t pid, int signal)
 	if (kill(pid, signal) == -1)
 		ft_handle_error("Error sending signal\n");
 }
-t_data	*ft_init_struct(int pid)
+t_data	*ft_init_struct(void)
 {
 	t_data	*data;
 
@@ -37,11 +37,11 @@ t_data	*ft_init_struct(int pid)
 	if (!data)
 		ft_handle_error("Malloc failed\n");
 	ft_init_queue(data);
-	ft_init_data(data, pid);
+	ft_init_data(data);
 	return (data);
 }
 
-void	ft_init_data(t_data *data, pid_t pid)
+void	ft_init_data(t_data *data)
 {
 	int	i;
 
@@ -50,7 +50,7 @@ void	ft_init_data(t_data *data, pid_t pid)
 	if (data->str != NULL)
 		free(data->str);
 	data->str = NULL;
-	data->client_pid = pid;
+	// data->client_pid = pid;
 	data->str_len = 0;
 	data->power = 0;
 	ft_init_queue(data);
@@ -87,13 +87,13 @@ int	ft_queue_is_full(t_data *data)
 	return (data->end == CHAR_BIT);
 }
 
-// void	ft_print_queue(t_data *data)
-// {
-// 	for (int i = 0; i < CHAR_BIT; i++)
-// 	{
-// 		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
-// 	}
-// }
+void	ft_print_queue(t_data *data)
+{
+	for (int i = 0; i < CHAR_BIT; i++)
+	{
+		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
+	}
+}
 
 int	ft_pow(int nb, int power)
 {
@@ -123,7 +123,7 @@ char	ft_binary_to_char(t_data *data)
 	return (result);
 }
 
-void	ft_extend_str(t_data *data)
+void	ft_allocate_memory(t_data *data)
 {
 	int		power;
 	char	*newstr;
@@ -150,27 +150,27 @@ void	ft_add_buffer_to_str(t_data *data)
 	if (!data)
 		return ;
 	if (data->str == NULL)
-		ft_extend_str(data);
+		ft_allocate_memory(data);
 	if (data->str[data->str_len - 1] != '\0')
-		ft_extend_str(data);
+		ft_allocate_memory(data);
 	c = ft_binary_to_char(data);
 	i = 0;
 	while (data->str[i] != '\0')
 		i++;
 	data->str[i] = c;
-	ft_init_queue(data);
 	if (c == '\0')
 	{
-		ft_putstr_fd(data->str, 1);
+		ft_putstr_fd(data->str, STDOUT_FILENO);
 		free(data->str);
 		data->str = NULL;
 		data->str_len = 0;
 		data->power = 0;
 	}
+	ft_init_queue(data);
 }
 
-void ft_handle_error(char *error_message)
+void	ft_handle_error(char *error_message)
 {
-	ft_putstr_fd(error_message, 1);
+	ft_putstr_fd(error_message, STDOUT_FILENO);
 	exit(EXIT_FAILURE);
 }

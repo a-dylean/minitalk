@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 19:34:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 12:58:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/16 15:07:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	ft_handle_server_signal(int signal, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	if (signal == SIGUSR1)
-		ft_putstr_fd("Received 1\n", 1);
-	if (signal == SIGUSR2)
-		ft_putstr_fd("Received 0\n", 1);
+		ft_putstr_fd("Received 1\n",  STDOUT_FILENO);
+	else if (signal == SIGUSR2)
+		ft_putstr_fd("Received 0\n",  STDOUT_FILENO);
 }
 
 static void	ft_send_bits(pid_t pid, char c)
