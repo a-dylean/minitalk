@@ -45,9 +45,9 @@ static void	ft_set_sigaction(void)
 {
 	struct sigaction	sa;
 
-	//sigemptyset(&sa.sa_mask);
+	sigemptyset(&sa.sa_mask);
 	ft_bzero(&sa, sizeof(sa));
-	//sa.sa_flags = SA_RESTART;
+	sa.sa_flags = SA_RESTART;
 	sa.sa_handler = ft_handle_server_signal;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
 		-1)

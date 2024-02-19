@@ -12,47 +12,20 @@
 
 #include "../include/minitalk.h"
 
-static void	ft_handle_server_signal(int sig)
+static void	ft_handle_server_signal(int signal)
 {
-	if (sig == SIGUSR1)
-		ft_putstr_fd("\e[33m > ACK signal received from server\n\e[0m",
+	if (signal == SIGUSR1)
+		ft_putstr_fd("Server received bit\n",
 			STDOUT_FILENO);
-	else if (sig == SIGUSR2)
+	else if (signal == SIGUSR2)
 	{
-		ft_putstr_fd("\e[92m > end of message signal received from server\n\e[0m",
+		ft_putstr_fd("Server received whole message\n",
 			STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
 }
-static void	ft_send_char(pid_t pid, char c)
-{
-	int		shift;
-	char	bit;
 
-	shift = (sizeof(char) * 8) - 1;
-	while (shift >= 0)
-	{
-		bit = (c >> shift) & 1;
-		send_bit(pid, bit, 1);
-		shift--;
-	}
-}
-
-static void	ft_send_int(pid_t pid, int num)
-{
-	int		shift;
-	char	bit;
-
-	shift = (sizeof(int) * 8) - 1;
-	while (shift >= 0)
-	{
-		bit = (num >> shift) & 1;
-		send_bit(pid, bit, 1);
-		shift--;
-	}
-}
-
-static void	client_send_message(int server_pid, char *str)
+static void	ft_send_message(int server_pid, char *str)
 {
 	int	i;
 
@@ -60,7 +33,11 @@ static void	client_send_message(int server_pid, char *str)
 	{
 		ft_send_int(server_pid, ft_strlen(str));
 		while (str[i] != '\0')
-			ft_send_char(server_pid, str[i++]);
+		{
+			ft_send_char(server_pid, str[i]);
+			i++;
+		}
+		ft_send_char(server_pid, '\n');
 		ft_send_char(server_pid, '\0');
 	}
 }
@@ -78,7 +55,7 @@ static void	ft_set_sigaction(void)
 }
 
 int	main(int argc, char **argv)
-{
+{	
 	pid_t	server_pid;
 
 	if (argc == 3 && argv[2][0])
@@ -87,8 +64,8 @@ int	main(int argc, char **argv)
 		if (kill(server_pid, 0) == -1 || server_pid <= 0)
 			ft_handle_error("Invalid server PID\n");
 		ft_set_sigaction();
-		client_send_message(server_pid, argv[2]);
-	}
+		ft_send_message(ft_atoi(argv[1]), argv[2]);
+	}	
 	else
 		ft_handle_error("Wrong input!\nCorrect usage: ./client [SERVER PID] [MESSAGE TO SEND]\n");
 	return (EXIT_SUCCESS);

@@ -12,7 +12,7 @@
 
 #include "../include/minitalk.h"
 
- t_data	g_data;
+t_data	g_data;
 
 static void	ft_check_str(t_data *g_data, pid_t client_pid)
 {
@@ -66,9 +66,9 @@ static void	ft_set_sigaction(void)
 {
 	struct sigaction	sa;
 
-	//sigemptyset(&sa.sa_mask);
+	sigemptyset(&sa.sa_mask);
 	ft_bzero(&sa, sizeof(sa));
-	//sa.sa_flags = SA_SIGINFO | SA_RESTART;
+	sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	sa.sa_sigaction = ft_handle_client_signal;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
 		-1)
