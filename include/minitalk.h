@@ -18,19 +18,22 @@
 # include <stdlib.h>
 # include <sys/types.h>
 
+# define INT_SIZE_IN_BITS 32
+# define CHAR_SIZE_IN_BITS 8
+
 typedef struct s_data
 {
 	int		bit_count;
-	int		index;
-	int		data;
+	unsigned int		data;
 	int		flag;
-	char	*message;
+	char	*str;
+	int		index;
 }			t_data;
 
-void	configure_sigaction_signals(struct sigaction *sa);
-void	send_int(pid_t pid, int num);
-void	send_char(pid_t pid, char c);
-void	send_bit(pid_t pid, char bit, char flag_to_pause);
+void	ft_send_signal(pid_t pid, int signal);
+void	ft_send_int(pid_t pid, int num);
+void	ft_send_char(pid_t pid, char c);
+void	ft_send_bit(pid_t pid, char bit, char flag_to_pause);
 void	ft_handle_error(char *error_message);
 void	ft_print_pid(void);
 #endif

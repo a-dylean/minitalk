@@ -29,72 +29,42 @@ void	ft_send_signal(pid_t pid, int signal)
 	if (kill(pid, signal) == -1)
 		ft_handle_error("Error sending signal\n");
 }
-void	configure_sigaction_signals(struct sigaction *sa)
+void	ft_send_bit(pid_t pid, char bit, char flag_to_pause)
 {
-	if (sigaction(SIGUSR1, sa, NULL) < 0)
-	{
-		ft_putstr_fd("\e[31m## error - could not setup SIGUSR1 ##\n\e[0m",
-			STDOUT_FILENO);
-		exit(EXIT_FAILURE);
-	}
-	if (sigaction(SIGUSR2, sa, NULL) < 0)
-	{
-		ft_putstr_fd("\e[31m## error - could not setup SIGUSR2 ##\n\e[0m",
-			STDOUT_FILENO);
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	send_int(pid_t pid, int num)
-{
-	int		shift;
-	char	bit;
-
-	shift = (sizeof(int) * 8) - 1;
-	while (shift >= 0)
-	{
-		bit = (num >> shift) & 1;
-		send_bit(pid, bit, 1);
-		shift--;
-	}
-}
-
-void	send_char(pid_t pid, char c)
-{
-	int		shift;
-	char	bit;
-
-	shift = (sizeof(char) * 8) - 1;
-	while (shift >= 0)
-	{
-		bit = (c >> shift) & 1;
-		send_bit(pid, bit, 1);
-		shift--;
-	}
-}
-
-void	send_bit(pid_t pid, char bit, char flag_to_pause)
-{
-	if (bit == 0)
-	{
-		if (kill(pid, SIGUSR1) < 0)
-		{
-			ft_putstr_fd("\e[31m## error - sending SIGUSR1 ##\n\e[0m",
-				STDOUT_FILENO);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else if (bit == 1)
-	{
-		if (kill(pid, SIGUSR2) < 0)
-		{
-			ft_putstr_fd("\e[31m## error - sending SIGUSR2 ##\n\e[0m",
-				STDOUT_FILENO);
-			exit(EXIT_FAILURE);
-		}
-	}
+	if (bit)
+		ft_send_signal(pid, SIGUSR1);
+	else
+		ft_send_signal(pid, SIGUSR2);
 	if (flag_to_pause != 0)
 		pause();
+}
+
+void	ft_send_int(pid_t pid, int num)
+{
+	int		i;
+	char	bit;
+
+	i = INT_SIZE_IN_BITS - 1;
+	while (i >= 0)
+	{
+		bit = (num >> i) & 1;
+		ft_send_bit(pid, bit, 1);
+		i--;
+	}
+}
+
+void	ft_send_char(pid_t pid, char c)
+{
+	int		i;
+	char	bit;
+
+	i = CHAR_SIZE_IN_BITS - 1;
+	while (i >= 0)
+	{
+		bit = (c >> i) & 1;
+		ft_send_bit(pid, bit, 1);
+		i--;
+	}
 }
 
 void	ft_handle_error(char *error_message)

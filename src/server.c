@@ -12,69 +12,64 @@
 
 #include "../include/minitalk.h"
 
-static void	server_is_message_finished(
-	t_data *data, pid_t client_pid)
+ t_data	g_data;
+
+static void	ft_check_str(t_data *g_data, pid_t client_pid)
 {
-	if (data->flag == 1 && data->bit_count == 8)
+	if (g_data->bit_count == CHAR_SIZE_IN_BITS && g_data->flag == 1)
 	{
-		data->message[data->index] = data->data;
-		data->index++;
-		if (data->data == '\0')
+		g_data->str[g_data->index] = g_data->data;
+		g_data->index++;
+		if (g_data->data == '\0')
 		{
-			ft_putstr_fd(data->message, STDOUT_FILENO);
-			free(data->message);
-			data->message = NULL;
-			data->flag = 0;
-			data->index = 0;
-			send_bit(client_pid, 1, 0);
+			ft_putstr_fd(g_data->str, STDOUT_FILENO);
+			free(g_data->str);
+			g_data->str = NULL;
+			g_data->flag = 0;
+			g_data->index = 0;
+			ft_send_bit(client_pid, 0, 0);
 		}
-		data->bit_count = 0;
+		g_data->bit_count = 0;
 	}
 }
 
-static void	server_is_str_length_finished(t_data *data)
+static void	ft_check_length(t_data *g_data)
 {
-	if (data->bit_count == sizeof(int) * 8 && data->flag == 0)
+	if (g_data->bit_count == INT_SIZE_IN_BITS && g_data->flag == 0)
 	{
-		data->flag = 1;
-		data->index = 0;
-		data->message = malloc(data->data + 1);
-		if (data->message == NULL)
+		g_data->flag = 1;
+		g_data->index = 0;
+		g_data->str = malloc(g_data->data + 1);
+		if (g_data->str == NULL)
 			ft_handle_error("Malloc failed\n");
-		data->message[data->index] = '\0';
-		data->bit_count = 0;
-		
+		g_data->str[g_data->index] = '\0';
+		g_data->bit_count = 0;	
 	}
 }
 
-static void	ft_handle_client_signal(int num, siginfo_t *info, void *context)
+static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
-	static t_data	data;
-
 	usleep(100);
 	(void)context;
 	(void)info;
-	if (data.bit_count == 0)
-		data.data = 0;
-	if (num == SIGUSR2 && data.flag == 0)
-		data.data += 1 << (7 - data.bit_count);
-	else if (num == SIGUSR2 && data.flag == 1)
-		data.data += 1 << (7 - data.bit_count);
-	data.bit_count++;
-	server_is_str_length_finished(&data);
-	server_is_message_finished(&data, info->si_pid);
-	send_bit(info->si_pid, 0, 0);
+	if (g_data.bit_count == 0)
+		g_data.data = 0;
+	if (signal == SIGUSR1)
+		g_data.data += 1 << (7 - g_data.bit_count);
+	g_data.bit_count++;
+	ft_check_length(&g_data);
+	ft_check_str(&g_data, info->si_pid);
+	ft_send_bit(info->si_pid, 1, 0);
 }
 
 static void	ft_set_sigaction(void)
 {
 	struct sigaction	sa;
 
-	sigemptyset(&sa.sa_mask);
+	//sigemptyset(&sa.sa_mask);
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_flags = SA_SIGINFO  | SA_RESTART;
+	//sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	sa.sa_sigaction = ft_handle_client_signal;
-	
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
 		-1)
 		ft_handle_error("Error setting up signal handler\n");
