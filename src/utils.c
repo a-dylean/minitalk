@@ -29,135 +29,72 @@ void	ft_send_signal(pid_t pid, int signal)
 	if (kill(pid, signal) == -1)
 		ft_handle_error("Error sending signal\n");
 }
-t_data	*ft_init_struct(void)
+void	configure_sigaction_signals(struct sigaction *sa)
 {
-	t_data	*data;
-
-	data = malloc(sizeof(t_data));
-	if (!data)
-		ft_handle_error("Malloc failed\n");
-	ft_init_queue(data);
-	ft_init_data(data);
-	return (data);
-}
-
-void	ft_init_data(t_data *data)
-{
-	int	i;
-
-	if (data == NULL)
-		return ;
-	if (data->str != NULL)
-		free(data->str);
-	data->str = NULL;
-	data->str_len = 0;
-	data->power = 0;
-	ft_init_queue(data);
-	i = 0;
-	while (i < CHAR_BIT)
+	if (sigaction(SIGUSR1, sa, NULL) < 0)
 	{
-		data->buffer[i] = -1;
-		i++;
+		ft_putstr_fd("\e[31m## error - could not setup SIGUSR1 ##\n\e[0m",
+			STDOUT_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	if (sigaction(SIGUSR2, sa, NULL) < 0)
+	{
+		ft_putstr_fd("\e[31m## error - could not setup SIGUSR2 ##\n\e[0m",
+			STDOUT_FILENO);
+		exit(EXIT_FAILURE);
 	}
 }
 
-void	ft_init_queue(t_data *data)
+void	send_int(pid_t pid, int num)
 {
-	data->start = 0;
-	data->end = 0;
-}
+	int		shift;
+	char	bit;
 
-int	ft_dequeue(t_data *data)
-{
-	return (data->buffer[data->start++]);
-}
-
-void	ft_enqueue(t_data *data, int bit)
-{
-	data->buffer[data->end] = bit;
-	data->end++;
-}
-
-int	ft_queue_is_empty(t_data *data)
-{
-	return (data->start == data->end);
-}
-int	ft_queue_is_full(t_data *data)
-{
-	return (data->end == CHAR_BIT);
-}
-
-// void	ft_print_queue(t_data *data)
-// {
-// 	for (int i = 0; i < CHAR_BIT; i++)
-// 	{
-// 		printf("Buffer[%d]: %d\n", i, data->buffer[i]);
-// 	}
-// }
-
-char	ft_binary_to_char(t_data *data)
-{
-	char	result;
-	int		i;
-	int		bit;
-
-	i = CHAR_BIT - 1;
-	result = 0;
-	bit = 0;
-	while (i >= 0)
+	shift = (sizeof(int) * 8) - 1;
+	while (shift >= 0)
 	{
-		bit = ft_dequeue(data);
-		if (bit == 1)
-			result += ft_pow(2, CHAR_BIT - 1 - i);
-		i--;
+		bit = (num >> shift) & 1;
+		send_bit(pid, bit, 1);
+		shift--;
 	}
-	return (result);
 }
 
-void	ft_allocate_memory(t_data *data)
+void	send_char(pid_t pid, char c)
 {
-	int		power;
-	char	*newstr;
-	int		len;
+	int		shift;
+	char	bit;
 
-	power = data->power + 1;
-	len = ft_pow(2, power);
-	newstr = malloc(len);
-	if (!newstr)
-		ft_handle_error("Malloc failed\n");
-	ft_bzero(newstr, len);
-	ft_memcpy(newstr, data->str, data->str_len);
-	free(data->str);
-	data->str = newstr;
-	data->power = power;
-	data->str_len = ft_pow(2, power);
-}
-
-void	ft_add_buffer_to_str(t_data *data)
-{
-	char	c;
-	int		i;
-
-	if (!data)
-		return ;
-	if (data->str == NULL)
-		ft_allocate_memory(data);
-	if (data->str[data->str_len - 1] != '\0')
-		ft_allocate_memory(data);
-	c = ft_binary_to_char(data);
-	i = 0;
-	while (data->str[i] != '\0')
-		i++;
-	data->str[i] = c;
-	if (c == '\0')
+	shift = (sizeof(char) * 8) - 1;
+	while (shift >= 0)
 	{
-		ft_putstr_fd(data->str, STDOUT_FILENO);
-		free(data->str);
-		data->str = NULL;
-		data->str_len = 0;
-		data->power = 0;
+		bit = (c >> shift) & 1;
+		send_bit(pid, bit, 1);
+		shift--;
 	}
-	ft_init_queue(data);
+}
+
+void	send_bit(pid_t pid, char bit, char flag_to_pause)
+{
+	if (bit == 0)
+	{
+		if (kill(pid, SIGUSR1) < 0)
+		{
+			ft_putstr_fd("\e[31m## error - sending SIGUSR1 ##\n\e[0m",
+				STDOUT_FILENO);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else if (bit == 1)
+	{
+		if (kill(pid, SIGUSR2) < 0)
+		{
+			ft_putstr_fd("\e[31m## error - sending SIGUSR2 ##\n\e[0m",
+				STDOUT_FILENO);
+			exit(EXIT_FAILURE);
+		}
+	}
+	if (flag_to_pause != 0)
+		pause();
 }
 
 void	ft_handle_error(char *error_message)

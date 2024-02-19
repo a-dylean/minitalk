@@ -12,29 +12,64 @@
 
 #include "../include/minitalk.h"
 
-t_data	*g_data;
-
-static void	ft_update_data(pid_t client_pid, int signal)
+static void	server_is_message_finished(
+	t_protocol *t_server, pid_t client_pid)
 {
-	(void)client_pid;;
-	ft_enqueue(g_data, signal);
-	if (ft_queue_is_full(g_data))
-		ft_add_buffer_to_str(g_data);
-	if (signal)
-		ft_send_signal(client_pid, SIGUSR1);
-	else
-		ft_send_signal(client_pid, SIGUSR2);
+	int i;
+	i = 0;
+	if (t_server->bits == 8 && t_server->flag == 1)
+	{
+		t_server->message[i] = t_server->data;
+		i++;
+		if (t_server->data == '\0')
+		{
+			ft_putstr_fd(t_server->message, STDOUT_FILENO);
+			free(t_server->message);
+			t_server->message = NULL;
+			t_server->flag = 0;
+			i = 0;
+			send_bit(client_pid, 1, 0);
+		}
+		t_server->bits = 0;
+	}
+}
+
+static void	server_is_str_length_finished(t_protocol *t_server)
+{
+	if (t_server->bits == sizeof(int) * 8 && t_server->flag == 0)
+	{
+		t_server->flag = 1;
+		ft_putnbr_fd(t_server->data, STDOUT_FILENO);
+		t_server->message = ft_calloc(t_server->data + 1, sizeof(char));
+		if (t_server->message == NULL)
+			ft_handle_error("Malloc failed\n");
+		t_server->message[t_server->data] = '\0';
+		t_server->bits = 0;
+	}
 }
 
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
+	static t_protocol	t_server;
+
+	usleep(100);
 	(void)context;
-	if (signal == SIGUSR1)
-		ft_update_data(info->si_pid, 1);
-	else if (signal == SIGUSR2)
-		ft_update_data(info->si_pid, 0);
-	else
-		ft_handle_error("Error receiving signal\n");
+	(void)info;
+	// printf("BITS: %d\n", t_server.bits);
+	// printf("DATA: %d\n", t_server.data);
+	// printf("message: %s\n", t_server.message);
+	if (t_server.bits == 0)
+		t_server.data = 0;
+	if (signal == SIGUSR2 && t_server.flag == 0)
+		t_server.data |= 1 << (((sizeof(int) * 8) - 1) - t_server.bits);
+	else if (signal == SIGUSR2 && t_server.flag == 1)
+		t_server.data |= 1 << (((sizeof(char) * 8) - 1) - t_server.bits);
+	t_server.bits++;
+
+
+	server_is_str_length_finished(&t_server);
+	server_is_message_finished(&t_server, info->si_pid);
+	send_bit(info->si_pid, 0, 0);
 }
 static void	ft_set_sigaction(void)
 {
@@ -46,7 +81,7 @@ static void	ft_set_sigaction(void)
 	sa.sa_sigaction = ft_handle_client_signal;
 	
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
-		-1 || sigaction(SIGINT, &sa, NULL) == -1)
+		-1)
 		ft_handle_error("Error setting up signal handler\n");
 }
 
@@ -56,7 +91,6 @@ int	main(int argc, char **argv)
 	ft_set_sigaction();
 	if (argc == 1)
 	{
-		g_data = ft_init_struct();
 		ft_print_pid();
 		while (1)
 			pause();
