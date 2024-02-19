@@ -15,14 +15,9 @@
 static void	ft_handle_server_signal(int signal)
 {
 	if (signal == SIGUSR1)
-		ft_putstr_fd("Server received bit\n",
-			STDOUT_FILENO);
+		return ;
 	else if (signal == SIGUSR2)
-	{
-		ft_putstr_fd("Server received whole message\n",
-			STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
-	}
 }
 
 static void	ft_send_message(int server_pid, char *str)
