@@ -6,13 +6,13 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:44:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/15 18:28:53 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:49:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
-t_data	g_data;
+t_data		g_data;
 
 static void	ft_check_str(t_data *g_data, pid_t client_pid)
 {
@@ -43,13 +43,13 @@ static void	ft_check_length(t_data *g_data)
 		if (g_data->str == NULL)
 			ft_handle_error("Malloc failed\n");
 		g_data->str[g_data->index] = '\0';
-		g_data->bit_count = 0;	
+		g_data->bit_count = 0;
 	}
 }
 
 static void	ft_handle_client_signal(int signal, siginfo_t *info, void *context)
 {
-	usleep(100);
+	usleep(SLEEP_TIME);
 	(void)context;
 	(void)info;
 	if (g_data.bit_count == 0)
@@ -68,20 +68,27 @@ static void	ft_set_sigaction(void)
 
 	sigemptyset(&sa.sa_mask);
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_flags = SA_SIGINFO | SA_RESTART;
+	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = ft_handle_client_signal;
-	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
-		-1)
+	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL)
+		== -1)
 		ft_handle_error("Error setting up signal handler\n");
 }
 
 int	main(int argc, char **argv)
 {
+	char	*server_pid;
+
 	(void)argv;
 	if (argc == 1)
 	{
 		ft_set_sigaction();
-		ft_print_pid();
+		server_pid = ft_itoa(getpid());
+		ft_putstr_fd("Server PID: ", STDOUT_FILENO);
+		ft_putstr_fd(server_pid, STDOUT_FILENO);
+		free(server_pid);
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putstr_fd("Waiting for the client...\n", STDOUT_FILENO);
 		while (1)
 			pause();
 	}
