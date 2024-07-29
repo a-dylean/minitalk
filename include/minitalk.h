@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:16:29 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/02/16 16:58:18 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:02:42 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 
 # define INT_SIZE_IN_BITS 32
 # define CHAR_SIZE_IN_BITS 8
+
+# define SLEEP_TIME 100
 
 typedef struct s_data
 {
@@ -35,5 +37,5 @@ void	ft_send_int(pid_t pid, int num);
 void	ft_send_char(pid_t pid, char c);
 void	ft_send_bit(pid_t pid, char bit, char flag_to_pause);
 void	ft_handle_error(char *error_message);
-void	ft_print_pid(void);
+
 #endif
